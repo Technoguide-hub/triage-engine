@@ -47,3 +47,7 @@ def public_triage(
         "ai_summary": json.loads(triage.ai_summary),
         "created_at": triage.created_at,
     }
+
+@router.get("/health")
+def health():
+    return {"status": "public api online"}
