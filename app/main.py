@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Triage Engine – Internal API",
-    docs_url="/docs",
+    docs_url="/",
     openapi_url="/openapi.json",
     lifespan=lifespan,  # 👈 aqui está a mágica
 )
