@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.public.app import public_app
+from fastapi.responses import RedirectResponse
 
 # Routers internos
 from app.auth.router import router as auth_router
@@ -42,3 +43,7 @@ def health():
     return {"status": "ok"}
 
 load_dotenv()
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/public/")

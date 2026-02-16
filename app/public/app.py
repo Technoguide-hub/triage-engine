@@ -7,7 +7,7 @@ from app.public.auth.router import router as public_auth_router
 public_app = FastAPI(
     title="Triage Engine API",
     description="""
-API pública de Pré-Triagem Clínica com IA responsável.
+API pública de Pré-Triagem com IA responsável.
 
 Uso:
 - Softwares médicos
@@ -19,8 +19,8 @@ Autenticação:
 - API Key via header X-API-Key
 """,
     version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
+    docs_url="/",
+    redoc_url=None,
     openapi_url="/openapi.json",
 )
 
