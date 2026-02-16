@@ -1,9 +1,13 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from app.core.database import engine, Base
+from app.core.database import engine, Base, SessionLocal
 from app.public.app import public_app
 from fastapi.responses import RedirectResponse
+from sqlalchemy.orm import Session
+from app.core.security import hash_password
+from app.auth.models import User
+from app.core.config import settings
 
 # Routers internos
 from app.auth.router import router as auth_router
@@ -17,10 +21,31 @@ from app.internal.api_keys.router import router as internal_api_keys_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # 🚀 CRIA TABELAS AUTOMATICAMENTE NO STARTUP
-    Base.metadata.create_all(bind=engine)
-    yield
 
+    # Criar tabelas
+    Base.metadata.create_all(bind=engine)
+
+    # Criar usuário owner se não existir
+    db: Session = SessionLocal()
+
+    try:
+        owner = db.query(User).filter(User.email == settings.OWNER_EMAIL).first()
+
+        if not owner:
+            owner = User(
+                email=settings.OWNER_EMAIL,
+                password_hash=hash_password(settings.OWNER_PASSWORD),
+                role="owner",
+                tenant_id=None,  # Owner global
+            )
+            db.add(owner)
+            db.commit()
+            print("✅ Owner criado automaticamente")
+
+    finally:
+        db.close()
+
+    yield
 
 app = FastAPI(
     title="Triage Engine – Internal API",
