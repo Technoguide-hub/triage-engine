@@ -9,7 +9,11 @@ class Settings(BaseSettings):
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
-    # EMAIL (opcional para piloto)
+    # OWNER (para criação automática)
+    OWNER_EMAIL: str | None = None
+    OWNER_PASSWORD: str | None = None
+
+    # EMAIL
     EMAIL_HOST: str | None = None
     EMAIL_PORT: int | None = None
     EMAIL_USER: str | None = None
@@ -18,5 +22,7 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+        extra = "ignore"
+
 
 settings = Settings()
