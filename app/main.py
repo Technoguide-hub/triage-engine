@@ -53,7 +53,6 @@ async def lifespan(app: FastAPI):
                     email=settings.OWNER_EMAIL,
                     password_hash=hash_password(settings.OWNER_PASSWORD),
                     role="owner",
-                    tenant_id=None,  # Owner global
                 )
                 db.add(owner)
                 db.commit()
