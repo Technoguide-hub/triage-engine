@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from app.core.database import engine, Base
 from app.public.app import public_app
+from fastapi.responses import RedirectResponse
 
 # Routers internos
 from app.auth.router import router as auth_router
@@ -23,7 +24,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Triage Engine – Internal API",
-    docs_url="/",
+    docs_url="/docs",
     openapi_url="/openapi.json",
     lifespan=lifespan,  # 👈 aqui está a mágica
 )
@@ -48,3 +49,7 @@ app.mount("/public", public_app)
 @app.get("/health", tags=["System"])
 def health():
     return {"status": "ok"}
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/public/")
