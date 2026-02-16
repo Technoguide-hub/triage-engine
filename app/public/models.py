@@ -14,28 +14,13 @@ from app.core.database import Base
 class ApiKey(Base):
     __tablename__ = "api_keys"
 
-    id = Column(
-        String,
-        primary_key=True,
-        default=lambda: str(uuid.uuid4()),
-    )
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    tenant_id = Column(String, nullable=False)
 
-    # 🔗 vínculo com o tenant
-    tenant_id = Column(String, index=True, nullable=False)
+    key = Column(String(128), unique=True, nullable=False)
 
-    # 🔑 chave pública usada pelo cliente
-    key = Column(String(128), unique=True, index=True, nullable=False)
+    is_active = Column(Boolean, default=True)
+    rate_limit_per_minute = Column(Integer, default=60)
 
-    # identificação humana (ex: "Integração Clinica X")
-    name = Column(String(100), nullable=False)
-
-    # controle de acesso
-    is_active = Column(Boolean, nullable=False, default=True)
-
-    # rate limit
-    rate_limit_per_minute = Column(Integer, nullable=False, default=60)
-
-    # auditoria
+    created_at = Column(DateTime, server_default=func.now())
     last_used_at = Column(DateTime, nullable=True)
-    created_at = Column(DateTime, nullable=False, server_default=func.now())
-    revoked_at = Column(DateTime, nullable=True)
