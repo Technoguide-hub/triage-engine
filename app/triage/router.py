@@ -46,7 +46,7 @@ def public_triage(
 
     Campos importantes:
     - external_id: ID do paciente/consulta no sistema externo
-    - clinic_type: medical | dental (opcional)
+    - clinic_type: clinico geral | odonto
     """
 
     # 🔐 Rate limit

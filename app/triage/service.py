@@ -29,8 +29,7 @@ def create_triage(
 
     # 1️⃣ Resolve clinic_type
     if clinic_type is None:
-        tenant = db.query(Tenant).filter(Tenant.id == tenant_id).first()
-        clinic_type = tenant.clinic_type if tenant else "medical"
+        clinic_type = clinic_type or "clinico geral"
 
     # 2️⃣ IA
     ai = generate_triage_summary(

@@ -9,7 +9,7 @@ from app.triage.ai.medical_prompt import MEDICAL_SYSTEM_INSTRUCTIONS
 from app.triage.ai.dental_prompt import DENTAL_SYSTEM_INSTRUCTIONS
 
 
-ClinicType = Literal["medical", "dental"]
+ClinicType = Literal["clinico geral", "odonto"]
 
 
 # ------------------------------------------------------------------
@@ -34,7 +34,7 @@ def _fallback_summary() -> TriageAISummary:
 # System instructions conforme tipo da clínica
 # ------------------------------------------------------------------
 def _get_system_instructions(clinic_type: ClinicType) -> str:
-    if clinic_type == "dental":
+    if clinic_type == "odonto":
         return DENTAL_SYSTEM_INSTRUCTIONS
     return MEDICAL_SYSTEM_INSTRUCTIONS  # default seguro
 
@@ -79,7 +79,7 @@ Retorne APENAS JSON válido conforme o formato obrigatório.
 # ------------------------------------------------------------------
 def generate_triage_summary(
     answers: dict,
-    clinic_type: ClinicType = "medical",
+    clinic_type: ClinicType = "clinico geral",
 ) -> TriageAISummary:
     """
     Orquestrador central da IA de pré-triagem.
@@ -98,7 +98,7 @@ def generate_triage_summary(
 
     prompt = (
         _build_dental_prompt(answers)
-        if clinic_type == "dental"
+        if clinic_type == "odonto"
         else _build_medical_prompt(answers)
     )
 
@@ -131,7 +131,7 @@ def generate_triage_summary(
     )
 def generate_triage_summary(
     answers: dict,
-    clinic_type: ClinicType = "medical",
+    clinic_type: ClinicType = "clinico geral",
 ) -> TriageAISummary:
 
     print("🔍 OPENAI_API_KEY:", bool(settings.OPENAI_API_KEY))
@@ -146,7 +146,7 @@ def generate_triage_summary(
 
     prompt = (
         _build_dental_prompt(answers)
-        if clinic_type == "dental"
+        if clinic_type == "odonto"
         else _build_medical_prompt(answers)
     )
 

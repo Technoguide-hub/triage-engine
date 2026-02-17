@@ -35,7 +35,7 @@ def public_triage(
     db=db,
     tenant_id=ctx["tenant_id"],
     data=data,
-    clinic_type=ctx.get("clinic_type"),
+    clinic_type=data.clinic_type,
     external_id=data.external_id,
     enable_alerts=False,
 )

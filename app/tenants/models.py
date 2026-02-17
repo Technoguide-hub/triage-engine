@@ -11,5 +11,5 @@ class Tenant(Base):
     clinic_type = Column(
         String,
         nullable=False,
-        default="medical",  # medical | dental
+        default="clinico geral",  # clinico | odonto
     )
