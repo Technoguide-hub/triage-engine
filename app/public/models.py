@@ -16,6 +16,7 @@ class ApiKey(Base):
 
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = Column(String, nullable=False)
+    name = Column(String(100), nullable=False)  # ✅ ADICIONAR
 
     key = Column(String(128), unique=True, nullable=False)
 
