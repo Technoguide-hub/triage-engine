@@ -129,3 +129,44 @@ def generate_triage_summary(
         urgencia="media",
         perguntas_para_consulta=[],
     )
+def generate_triage_summary(
+    answers: dict,
+    clinic_type: ClinicType = "medical",
+) -> TriageAISummary:
+
+    print("🔍 OPENAI_API_KEY:", bool(settings.OPENAI_API_KEY))
+    print("🔍 OPENAI_MODEL:", settings.OPENAI_MODEL)
+
+    if not settings.OPENAI_API_KEY:
+        print("❌ OPENAI_API_KEY não encontrada")
+        return _fallback_summary()
+
+    client = get_openai_client()
+    system_instructions = _get_system_instructions(clinic_type)
+
+    prompt = (
+        _build_dental_prompt(answers)
+        if clinic_type == "dental"
+        else _build_medical_prompt(answers)
+    )
+
+    try:
+        print("🚀 Chamando OpenAI...")
+        response = client.responses.create(
+            model=settings.OPENAI_MODEL,
+            instructions=system_instructions,
+            input=prompt,
+        )
+
+        print("✅ Resposta recebida")
+
+        output_text = response.output_text
+        print("📦 Output:", output_text)
+
+        data = json.loads(output_text)
+
+        return TriageAISummary.model_validate(data)
+
+    except Exception as e:
+        print("🔥 ERRO OPENAI:", str(e))
+        raise e  # 👈 IMPORTANTE
