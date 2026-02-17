@@ -12,7 +12,6 @@ def authenticate(db: Session, email: str, password: str):
 
     token = create_access_token({
         "sub": user.id,
-        "tenant_id": user.tenant_id,
         "role": user.role
     })
     return token
