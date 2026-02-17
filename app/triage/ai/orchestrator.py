@@ -114,16 +114,18 @@ def generate_triage_summary(
 
         return TriageAISummary.model_validate(data)
 
-    except Exception:
-        return TriageAISummary(
-            resumo_curto="Falha ao gerar resumo automático.",
-            soap={
-                "S": "não informado",
-                "O": "não informado",
-                "A": "revisar manualmente",
-                "P": "revisar manualmente",
-            },
-            red_flags=[],
-            urgencia="media",
-            perguntas_para_consulta=[],
-        )
+    except Exception as e:
+        print("🔥 OpenAI error:", str(e))
+
+    return TriageAISummary(
+        resumo_curto="Falha ao gerar resumo automático.",
+        soap={
+            "S": "não informado",
+            "O": "não informado",
+            "A": "revisar manualmente",
+            "P": "revisar manualmente",
+        },
+        red_flags=[],
+        urgencia="media",
+        perguntas_para_consulta=[],
+    )
