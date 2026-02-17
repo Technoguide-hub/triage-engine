@@ -3,6 +3,9 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.tenants.models import Tenant
 from app.core.tenant import get_current_context
+from app.tenants.models import Tenant
+from app.tenants.schemas import TenantCreate, TenantResponse
+import uuid
 
 router = APIRouter(prefix="/tenants", tags=["Tenants"])
 
@@ -13,3 +16,15 @@ def get_my_tenant(
     db: Session = Depends(get_db)
 ):
     return db.query(Tenant).filter(Tenant.id == ctx["tenant_id"]).first()
+
+@router.post("/", response_model=TenantResponse)
+def create_tenant(data: TenantCreate, db: Session = Depends(get_db)):
+    tenant = Tenant(
+        id=str(uuid.uuid4()),
+        name=data.name,
+        clinic_type=data.clinic_type
+    )
+    db.add(tenant)
+    db.commit()
+    db.refresh(tenant)
+    return tenant

@@ -1,6 +1,10 @@
 from pydantic import BaseModel
 
-class TenantOut(BaseModel):
+class TenantCreate(BaseModel):
+    name: str
+    clinic_type: str
+
+class TenantResponse(BaseModel):
     id: str
     name: str
     clinic_type: str
