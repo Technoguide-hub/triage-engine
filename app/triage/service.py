@@ -11,6 +11,7 @@ from app.triage.ai.orchestrator import generate_triage_summary
 from app.notifications.alerts import alert_if_critical
 from app.tenants.models import Tenant
 
+SUPPORTED_CLINIC_TYPES = {"clinico geral", "odonto"}
 
 # ---------------------------------------------------------------------
 # CREATE TRIAGE (medical + dental | interno + API pública)
@@ -28,8 +29,13 @@ def create_triage(
     """
 
     # 1️⃣ Resolve clinic_type
-    if clinic_type is None:
-        clinic_type = clinic_type or "clinico geral"
+    clinic_type = clinic_type or "clinico geral"
+
+    if clinic_type not in SUPPORTED_CLINIC_TYPES:
+        raise ValueError(
+        f"Unsupported clinic_type '{clinic_type}'. "
+        f"Supported types: {SUPPORTED_CLINIC_TYPES}"
+    )
 
     # 2️⃣ IA
     ai = generate_triage_summary(

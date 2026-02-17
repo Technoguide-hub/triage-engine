@@ -4,20 +4,22 @@ from typing import Literal
 
 
 class PublicTriageCreate(BaseModel):
-    """
-    Schema público para parceiros externos.
-    NÃO depende do conceito de appointment interno.
-    """
-    
-    clinic_type: Literal["medical", "dental"]
-    external_id: Optional[str] = Field(
-        None,
-        description="ID da consulta/paciente no sistema externo",
-        example="consulta_789"
-        
-    
-    )
+    clinic_type: str = Field(..., description="Tipo da clínica (ex: clinico geral, odonto)")
+    external_id: str = Field(..., description="ID externo do paciente no sistema cliente")
+    answers: Dict
 
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "clinic_type": "clinico geral",
+                "external_id": "patient_123",
+                "answers": {
+                    "queixa_principal": "Dor abdominal",
+                    "inicio": "há 2 dias",
+                    "febre": True
+                }
+            }
+        }
     answers: Dict[str, Any] = Field(
         ...,
         description="Respostas estruturadas da pré-triagem",
